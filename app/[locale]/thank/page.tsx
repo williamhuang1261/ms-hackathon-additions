@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import StickyHeader from "@/components/LandingPage/StickyHeader";
 import ThankYouHeader from "@/components/ThankYouPage/ThankYouHeader";
+import AiThankYouMessage from "@/components/ThankYouPage/AiThankYouMessage";
 import Certificate from "@/components/Certificate";
 import { CERTIFICATE_TIERS, getCertificateTier } from "@/lib/donation-utils";
 
@@ -94,12 +95,12 @@ const ThankYouPage = () => {
                 softBackgroundColor={certificateTheme.bgColor}
                 gradientBackground={certificateTheme.badgeGradient}
               />
-              {/* <p
-                className="w-full max-w-3xl text-base"
-                style={{ color: certificateTheme.color, opacity: 0.85 }}
-              >
-                {donorName}, your gift is already at work—{donationImpact}
-              </p> */}
+              <AiThankYouMessage
+                donorName={donorName}
+                amount={donationAmount}
+                impactDescription={donationImpact}
+                textColor={certificateTheme.color}
+              />
             </div>
             <div className="flex h-full w-full items-stretch justify-center lg:justify-end">
               <Certificate

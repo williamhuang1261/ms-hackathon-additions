@@ -49,6 +49,22 @@ function parseBody(raw: ThanksRequestBody): { donorName: string; amount: number;
   return { donorName, amount, impact };
 }
 
+function fallbackStreamResponse(donorName: string, amount: number): Response {
+  const message = buildFallbackMessage(donorName, amount);
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(new TextEncoder().encode(message));
+      controller.close();
+    },
+  });
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "x-thanks-source": "fallback",
+    },
+  });
+}
+
 export async function POST(request: Request) {
   const raw = (await request.json().catch(() => ({}))) as ThanksRequestBody;
   const { donorName, amount, impact } = parseBody(raw);
@@ -56,10 +72,7 @@ export async function POST(request: Request) {
   const hasApiKey = Boolean(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
 
   if (!hasApiKey) {
-    return Response.json({
-      source: "fallback",
-      message: buildFallbackMessage(donorName, amount),
-    });
+    return fallbackStreamResponse(donorName, amount);
   }
 
   try {
@@ -75,9 +88,6 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("AI SDK call failed, falling back", error);
-    return Response.json({
-      source: "fallback",
-      message: buildFallbackMessage(donorName, amount),
-    });
+    return fallbackStreamResponse(donorName, amount);
   }
 }

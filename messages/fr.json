@@ -571,6 +571,9 @@
     }
   },
   "thankYou": {
+    "aiMessage": {
+      "loading": "Rédaction d'un mot de remerciement personnalisé..."
+    },
     "chart": {
       "title": "Votre impact",
       "description": "Voici comment votre argent sera utilisé",

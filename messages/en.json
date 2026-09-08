@@ -571,6 +571,9 @@
     }
   },
   "thankYou": {
+    "aiMessage": {
+      "loading": "Writing a personal thank-you note..."
+    },
     "chart": {
       "title": "Your Impact",
       "description": "Here is how your money will be used",
