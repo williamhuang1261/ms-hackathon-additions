@@ -1,7 +1,11 @@
 import { google } from "@ai-sdk/google";
 import { streamText } from "ai";
 
-export const runtime = "edge";
+// Originally shipped as `runtime = "edge"`; Vercel's platform now rejects
+// the Edge Runtime for new deployments ("The Edge runtime is deprecated"),
+// so this runs on the Node.js runtime instead, per Vercel's own current
+// guidance. See the README's engineering notes for the full story.
+export const runtime = "nodejs";
 
 const MODEL_ID = "gemini-2.0-flash";
 
